@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/EbiBackend/EbiBackend.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/EbiBackend.Tests/EbiBackend.Tests.csproj" />
+  </Folder>
+</Solution>

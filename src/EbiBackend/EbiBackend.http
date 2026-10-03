@@ -1,0 +1,6 @@
+@EbiBackend_HostAddress = http://localhost:5179
+
+GET {{EbiBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
