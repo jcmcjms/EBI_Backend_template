@@ -1,6 +1,7 @@
 using System.Text;
 using EbiBackend.Features.Auth.Persistence;
 using EbiBackend.Features.Auth.Services;
+using EbiBackend.Features.Users.Services;
 using EbiBackend.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ public static class ServiceRegistration
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IUserService, UserService>();
 
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
 
