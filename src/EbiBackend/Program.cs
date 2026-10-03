@@ -1,5 +1,6 @@
 using EbiBackend.Composition;
 using EbiBackend.Features.Auth.Endpoints;
+using EbiBackend.Features.Users.Endpoints;
 using EbiBackend.Infrastructure;
 using Scalar.AspNetCore;
 
@@ -20,6 +21,7 @@ app.MapScalarApiReference(options =>
 });
 
 app.MapAuthEndpoints();
+app.MapUserEndpoints();
 
 app.Run();
 
