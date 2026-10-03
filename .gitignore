@@ -63,3 +63,8 @@ publish/
 ## dotnet tool
 .dotnet/
 .config/
+
+## AI/agent config and docs
+AGENTS.md
+docs/
+.github/
