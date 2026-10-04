@@ -17,7 +17,7 @@ public class RegisterEndpointTests : IClassFixture<Helpers.TestWebApplicationFac
     [Fact]
     public async Task Register_WithValidRequest_ReturnsCreated()
     {
-        var request = new RegisterRequest("test@example.com", "Password123!", "Test User");
+        var request = new RegisterRequest("test@example.com", "testuser", "Password123!", "Test User");
 
         var response = await _client.PostAsJsonAsync("/auth/register", request);
 
@@ -31,7 +31,7 @@ public class RegisterEndpointTests : IClassFixture<Helpers.TestWebApplicationFac
     [Fact]
     public async Task Register_WithDuplicateEmail_ReturnsConflict()
     {
-        var request = new RegisterRequest("duplicate@example.com", "Password123!", "User One");
+        var request = new RegisterRequest("duplicate@example.com", "userone", "Password123!", "User One");
 
         await _client.PostAsJsonAsync("/auth/register", request);
         var response = await _client.PostAsJsonAsync("/auth/register", request);
@@ -42,7 +42,7 @@ public class RegisterEndpointTests : IClassFixture<Helpers.TestWebApplicationFac
     [Fact]
     public async Task Register_WithInvalidEmail_ReturnsBadRequest()
     {
-        var request = new RegisterRequest("invalid-email", "Password123!", "Test User");
+        var request = new RegisterRequest("invalid-email", "testuser", "Password123!", "Test User");
 
         var response = await _client.PostAsJsonAsync("/auth/register", request);
 
@@ -52,7 +52,7 @@ public class RegisterEndpointTests : IClassFixture<Helpers.TestWebApplicationFac
     [Fact]
     public async Task Register_WithShortPassword_ReturnsBadRequest()
     {
-        var request = new RegisterRequest("test2@example.com", "short", "Test User");
+        var request = new RegisterRequest("test2@example.com", "testuser2", "short", "Test User");
 
         var response = await _client.PostAsJsonAsync("/auth/register", request);
 

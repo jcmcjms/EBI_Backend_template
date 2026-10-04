@@ -17,7 +17,7 @@ public class LoginEndpointTests : IClassFixture<Helpers.TestWebApplicationFactor
     [Fact]
     public async Task Login_WithValidCredentials_ReturnsTokens()
     {
-        var registerRequest = new RegisterRequest("login@example.com", "Password123!", "Login User");
+        var registerRequest = new RegisterRequest("login@example.com", "loginuser", "Password123!", "Login User");
         await _client.PostAsJsonAsync("/auth/register", registerRequest);
 
         var loginRequest = new LoginRequest("login@example.com", "Password123!");
@@ -33,7 +33,7 @@ public class LoginEndpointTests : IClassFixture<Helpers.TestWebApplicationFactor
     [Fact]
     public async Task Login_WithWrongPassword_ReturnsUnauthorized()
     {
-        var registerRequest = new RegisterRequest("wrong@example.com", "Password123!", "Wrong User");
+        var registerRequest = new RegisterRequest("wrong@example.com", "wronguser", "Password123!", "Wrong User");
         await _client.PostAsJsonAsync("/auth/register", registerRequest);
 
         var loginRequest = new LoginRequest("wrong@example.com", "WrongPassword!");

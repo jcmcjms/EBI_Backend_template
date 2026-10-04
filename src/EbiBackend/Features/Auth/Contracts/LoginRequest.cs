@@ -1,5 +1,5 @@
 namespace EbiBackend.Features.Auth.Contracts;
 
 public sealed record LoginRequest(
-    string Email,
+    string EmailOrUsername,
     string Password);

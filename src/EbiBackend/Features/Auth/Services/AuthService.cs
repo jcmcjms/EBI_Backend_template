@@ -23,15 +23,16 @@ public sealed class AuthService : IAuthService
     {
         var existingUser = await _dbContext.Users
             .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Email == request.Email || u.Username == request.Username, cancellationToken);
 
         if (existingUser is not null)
-            return Result<UserProfileResponse>.Failure("A user with this email already exists.");
+            return Result<UserProfileResponse>.Failure("A user with this email or username already exists.");
 
         var user = new User
         {
             Id = Guid.NewGuid(),
             Email = request.Email,
+            Username = request.Username,
             DisplayName = request.DisplayName,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password, workFactor: 12),
             CreatedAt = _timeProvider.GetUtcNow().UtcDateTime
@@ -46,10 +47,10 @@ public sealed class AuthService : IAuthService
     public async Task<Result<TokenResponse>> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Email == request.EmailOrUsername || u.Username == request.EmailOrUsername, cancellationToken);
 
         if (user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-            return Result<TokenResponse>.Failure("Invalid email or password.");
+            return Result<TokenResponse>.Failure("Invalid email/username or password.");
 
         var accessToken = _tokenService.GenerateAccessToken(user);
         var refreshToken = _tokenService.GenerateRefreshToken();

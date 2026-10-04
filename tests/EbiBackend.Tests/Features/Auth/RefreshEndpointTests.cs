@@ -17,7 +17,7 @@ public class RefreshEndpointTests : IClassFixture<Helpers.TestWebApplicationFact
     [Fact]
     public async Task Refresh_WithValidToken_ReturnsNewTokens()
     {
-        var registerRequest = new RegisterRequest("refresh@example.com", "Password123!", "Refresh User");
+        var registerRequest = new RegisterRequest("refresh@example.com", "refreshuser", "Password123!", "Refresh User");
         await _client.PostAsJsonAsync("/auth/register", registerRequest);
 
         var loginRequest = new LoginRequest("refresh@example.com", "Password123!");
@@ -38,7 +38,7 @@ public class RefreshEndpointTests : IClassFixture<Helpers.TestWebApplicationFact
     [Fact]
     public async Task Refresh_WithRevokedToken_ReturnsUnauthorized()
     {
-        var registerRequest = new RegisterRequest("revoke@example.com", "Password123!", "Revoke User");
+        var registerRequest = new RegisterRequest("revoke@example.com", "revokeuser", "Password123!", "Revoke User");
         await _client.PostAsJsonAsync("/auth/register", registerRequest);
 
         var loginRequest = new LoginRequest("revoke@example.com", "Password123!");

@@ -11,6 +11,7 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseCors("Frontend");
 app.UseAuthentication();
 app.UseAuthorization();
 

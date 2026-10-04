@@ -13,6 +13,13 @@ public static class AuthValidator
         else if (!request.Email.Contains('@'))
             errors.Add("Email is not valid.");
 
+        if (string.IsNullOrWhiteSpace(request.Username))
+            errors.Add("Username is required.");
+        else if (request.Username.Length < 3)
+            errors.Add("Username must be at least 3 characters.");
+        else if (request.Username.Length > 50)
+            errors.Add("Username must be 50 characters or fewer.");
+
         if (string.IsNullOrWhiteSpace(request.Password))
             errors.Add("Password is required.");
         else if (request.Password.Length < 8)
@@ -28,8 +35,8 @@ public static class AuthValidator
     {
         var errors = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(request.Email))
-            errors.Add("Email is required.");
+        if (string.IsNullOrWhiteSpace(request.EmailOrUsername))
+            errors.Add("Email or username is required.");
 
         if (string.IsNullOrWhiteSpace(request.Password))
             errors.Add("Password is required.");

@@ -18,7 +18,8 @@ public class UserEndpointTests : IClassFixture<Helpers.TestWebApplicationFactory
 
     private async Task<(string AccessToken, Guid UserId)> RegisterAndLoginAsync(string email = "usercrud@example.com", string password = "Password123!", string displayName = "CRUD User")
     {
-        var registerRequest = new RegisterRequest(email, password, displayName);
+        var username = email.Split('@')[0] + "crud";
+        var registerRequest = new RegisterRequest(email, username, password, displayName);
         var registerResponse = await _client.PostAsJsonAsync("/auth/register", registerRequest);
         var registered = await registerResponse.Content.ReadFromJsonAsync<UserProfileResponse>();
 
