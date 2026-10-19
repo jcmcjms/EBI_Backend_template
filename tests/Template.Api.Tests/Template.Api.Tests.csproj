@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <!-- xunit v3 runs on Microsoft.Testing.Platform; the .NET 10 SDK no longer supports the VSTest path. -->
+    <OutputType>Exe</OutputType>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+    <UseMicrosoftTestingPlatformRunnerMode>true</UseMicrosoftTestingPlatformRunnerMode>
+    <!-- Test-only analyzer relaxations (production projects stay strict):
+         CA1707: underscores in test method names are the established readability convention.
+         xUnit1051: threading TestContext cancellation through HTTP assertions adds noise without
+         changing what the tests prove; runs are bounded by the runner timeout. -->
+    <NoWarn>$(NoWarn);CA1707;xUnit1051</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.13" />
+    <PackageReference Include="xunit.v3" Version="4.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Serial collection execution: keeps peak memory bounded on small CI agents and removes
+         cross-suite resource contention; runtime is dominated by hashing, not parallelism. -->
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Template.Api\Template.Api.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,44 @@
+# Local development stack: SQL Server + the API.
+# NOT a production deployment manifest: the SA password below is a local-development value, and
+# production configuration must come from a secret store (see README "Deployment notes").
+name: template-api
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+      MSSQL_SA_PASSWORD: "LocalDevPassword1!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  api:
+    build:
+      context: .
+      dockerfile: src/Template.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__Database: "Server=sqlserver,1433;Database=TemplateApi;User Id=sa;Password=LocalDevPassword1!;TrustServerCertificate=True"
+      Database__ApplyMigrations: "true"
+      # Override via .env for anything beyond local experimentation.
+      Auth__SigningKey: "${AUTH_SIGNING_KEY:-dev-only-signing-key-not-for-production-use-change-me-0123456789}"
+      Seed__AdminEmail: "${SEED_ADMIN_EMAIL:-admin@localhost.dev}"
+      Seed__AdminPassword: "${SEED_ADMIN_PASSWORD:-LocalDevAdminPassword1!}"
+    ports:
+      - "8080:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+volumes:
+  sqlserver-data:
