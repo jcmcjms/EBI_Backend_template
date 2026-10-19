@@ -1,0 +1,43 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.{json,yml,yaml,csproj,props,targets,sln,slnx,config}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.cs]
+# Namespace and type style
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+csharp_prefer_braces = true:warning
+
+# Naming
+dotnet_naming_rule.private_fields_underscore.severity = suggestion
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = camel_case_underscore
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.camel_case_underscore.required_prefix = _
+dotnet_naming_style.camel_case_underscore.capitalization = camel_case
+
+# Keep async methods honest
+dotnet_diagnostic.CS1998.severity = warning    # async method lacks await
+dotnet_diagnostic.CA2007.severity = none       # ConfigureAwait: not required in ASP.NET Core (no synchronization context)
+dotnet_diagnostic.CA1848.severity = suggestion # LoggerMessage delegates: enforced on proven hot paths, not globally
+
+# EF Core tool-generated migrations and model snapshots: reviewed as diffs, never hand-edited.
+# Compiler warnings (e.g. nullability) still apply; only analyzer/style rules are disabled here.
+[src/Template.Api/Infrastructure/Persistence/Migrations/*.cs]
+generated_code = true
+dotnet_analyzer_diagnostic.severity = none
+
